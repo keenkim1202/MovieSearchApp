@@ -9,10 +9,10 @@ import Foundation
 import Alamofire
 
 class APIService {
-  let clientID = Bundle.main.clientID
-  let clientSecret = Bundle.main.clientSecret
+  private let clientID = Bundle.main.clientID
+  private let clientSecret = Bundle.main.clientSecret
   
-  func fetchLocationInfo(query: String, result: @escaping (Int, [Movie]) -> Void) {
+  func fetchLocationInfo(query: String, result: @escaping (Int, MovieInfo) -> Void) {
     let url = Endpoint.searchMovie.url
     
     let params: Parameters = [
@@ -26,7 +26,7 @@ class APIService {
     
     AF.request(url, method: .get, parameters: params, headers: headers)
       .validate(statusCode: 200..<500)
-      .responseDecodable(of: [Movie].self) { response in
+      .responseDecodable(of: MovieInfo.self) { response in
         
         switch response.result {
         case .success(let value):

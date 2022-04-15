@@ -11,6 +11,7 @@ class SearchViewController: UIViewController {
 
   // MARK: Properties
   let searchView = SearchView()
+  let apiService = APIService()
   
   // MARK: View Life-Cycle
   override func loadView() {
@@ -20,6 +21,13 @@ class SearchViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     configure()
+
+    apiService.fetchLocationInfo(query: "스파이더맨") { code, data in // test
+      let itmes = data.items
+      for item in itmes {
+        print(item)
+      }
+    }
   }
   
   // MARK: Configure

@@ -15,3 +15,7 @@ struct Movie: Decodable {
   let userRating: String // userRating
   let link: String // link
 }
+
+struct MovieInfo: Decodable {
+  let items: [Movie]
+}
