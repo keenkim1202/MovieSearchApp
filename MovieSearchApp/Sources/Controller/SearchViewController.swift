@@ -6,12 +6,15 @@
 //
 
 import UIKit
+import Kingfisher
 
 class SearchViewController: UIViewController {
 
   // MARK: Properties
   let searchView = SearchView()
   let apiService = APIService()
+  
+  var movieList: [Movie] = []
   
   // MARK: View Life-Cycle
   override func loadView() {
@@ -22,11 +25,10 @@ class SearchViewController: UIViewController {
     super.viewDidLoad()
     configure()
 
-    apiService.fetchLocationInfo(query: "스파이더맨") { code, data in // test
-      let itmes = data.items
-      for item in itmes {
-        print(item)
-      }
+    apiService.fetchLocationInfo(query: "스파이더맨") { code, data in
+      self.movieList = data.items
+      self.searchView.tableView.reloadData()
+      print(self.movieList[0])
     }
   }
   
@@ -66,11 +68,17 @@ class SearchViewController: UIViewController {
 // MARK: Extensions - UITableViewDelegate & UITableViewDataSource
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 5 // test
+    return movieList.count
   }
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.identifier, for: indexPath) as? SearchTableViewCell else { return UITableViewCell() }
+    let movie = movieList[indexPath.row]
+    cell.posterImageView.kf.setImage(with: URL(string: movie.image))
+    cell.titleLabel.text = movie.title
+    cell.directorLabel.text = movie.director
+    cell.actorLabel.text = movie.actor
+    cell.rateLabel.text = movie.userRating
     return cell
   }
   
