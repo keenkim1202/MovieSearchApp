@@ -28,7 +28,7 @@ class SearchViewController: UIViewController {
     apiService.fetchLocationInfo(query: "스파이더맨") { code, data in
       self.movieList = data.items
       self.searchView.tableView.reloadData()
-      print(self.movieList[0])
+      print(self.movieList[3])
     }
   }
   
@@ -58,6 +58,11 @@ class SearchViewController: UIViewController {
     navigationItem.searchController = searchController
   }
   
+  private func removeBTags(_ string: String) -> String {
+    return string
+      .replacingOccurrences(of: "<b>", with: "")
+      .replacingOccurrences(of: "</b>", with: "")
+  }
   
   @objc func onFavoriteList() {
     print(#function)
@@ -74,16 +79,18 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.identifier, for: indexPath) as? SearchTableViewCell else { return UITableViewCell() }
     let movie = movieList[indexPath.row]
-    cell.posterImageView.kf.setImage(with: URL(string: movie.image))
-    cell.titleLabel.text = movie.title
-    cell.directorLabel.text = movie.director
-    cell.actorLabel.text = movie.actorList
-    cell.rateLabel.text = movie.userRating
+    let imageUrl = URL(string: movie.image)
+  
+    cell.posterImageView.kf.setImage(with: imageUrl, placeholder: UIImage(systemName: "square.slash"))
+    cell.titleLabel.text = removeBTags(movie.title)
+    cell.directorLabel.text = "감독: \(movie.director.checkIsEmpty)"
+    cell.actorLabel.text = "출현: \(movie.actorList.checkIsEmpty)"
+    cell.rateLabel.text = "평점: \(movie.userRating.checkIsEmpty)"
     return cell
   }
   
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    return 110 // test
+    return 110
   }
 }
 

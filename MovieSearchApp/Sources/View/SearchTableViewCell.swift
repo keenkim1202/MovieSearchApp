@@ -17,8 +17,8 @@ class SearchTableViewCell: UITableViewCell, ViewRepresentable {
     let imageView = UIImageView()
     imageView.image = UIImage(systemName: "square.slash")
     imageView.contentMode = .scaleAspectFit
-    imageView.backgroundColor = .mainOrangeColor
-    imageView.tintColor = .white
+    imageView.backgroundColor = .white
+    imageView.tintColor = .mainOrangeColor
     return imageView
   }()
   
@@ -113,7 +113,6 @@ class SearchTableViewCell: UITableViewCell, ViewRepresentable {
       $0.trailing.equalTo(safeArea).offset(-10)
       $0.top.equalTo(safeArea).offset(10)
     }
-    
   }
   
 }
