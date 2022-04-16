@@ -77,7 +77,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     cell.posterImageView.kf.setImage(with: URL(string: movie.image))
     cell.titleLabel.text = movie.title
     cell.directorLabel.text = movie.director
-    cell.actorLabel.text = movie.actor
+    cell.actorLabel.text = movie.actorList
     cell.rateLabel.text = movie.userRating
     return cell
   }

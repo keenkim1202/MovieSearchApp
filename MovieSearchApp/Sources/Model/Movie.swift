@@ -11,9 +11,14 @@ struct Movie: Decodable {
   let image: String // image
   let title: String // title
   let director: String // director
-  let actor: String // actor
+  let actorList: String // actor
   let userRating: String // userRating
   let link: String // link
+  
+  enum CodingKeys: String, CodingKey {
+    case image, title, director, userRating, link
+    case actorList = "actor"
+  }
 }
 
 struct MovieInfo: Decodable {
