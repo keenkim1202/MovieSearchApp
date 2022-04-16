@@ -33,6 +33,7 @@ class SearchViewController: UIViewController {
   // MARK: Configure
   func configure() {
     configureNavigationBar()
+    configureSearchController()
     
     searchView.tableView.delegate = self
     searchView.tableView.dataSource = self
@@ -46,6 +47,15 @@ class SearchViewController: UIViewController {
     self.navigationItem.rightBarButtonItem = rightBarButton
   }
   
+  func configureSearchController() {
+    let searchController = UISearchController(searchResultsController: nil)
+    searchController.searchResultsUpdater = self
+    searchController.searchBar.delegate = self
+    navigationItem.hidesSearchBarWhenScrolling = false
+    searchController.searchBar.placeholder = "영화명을 검색해보세요"
+    navigationItem.searchController = searchController
+  }
+  
   
   @objc func onFavoriteList() {
     print(#function)
@@ -53,7 +63,7 @@ class SearchViewController: UIViewController {
   
 }
 
-// MARK: Extensions
+// MARK: Extensions - UITableViewDelegate & UITableViewDataSource
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return 5 // test
@@ -67,6 +77,18 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
     return 110 // test
   }
+}
+
+//MARK: Extensions - UISearchResultsUpdating
+extension SearchViewController: UISearchResultsUpdating {
+  func updateSearchResults(for searchController: UISearchController) {
+    print(#function)
+  }
   
+  
+}
+
+//MARK: Extensions - UISearchBarDelegate
+extension SearchViewController: UISearchBarDelegate {
   
 }
