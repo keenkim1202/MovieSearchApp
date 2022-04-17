@@ -10,7 +10,8 @@ import WebKit
 import SnapKit
 
 class DetailView: UIView, ViewRepresentable {
-  
+
+  // MARK: Property
   var topConstraint: Constraint? = nil
   
   // MARK: - UI
@@ -58,6 +59,7 @@ class DetailView: UIView, ViewRepresentable {
   }
 }
 
+// MARK: Extension - UIScrollViewDelegate
 extension DetailView: UIScrollViewDelegate {
   func scrollViewDidScroll(_ scrollView: UIScrollView) {
     guard let topConstraint = topConstraint else { return }

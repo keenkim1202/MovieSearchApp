@@ -78,7 +78,11 @@ class SearchViewController: BaseViewController {
   }
 
   @objc func onFavoriteList() {
-    print(#function)
+    let favoritesVC = FavoritesViewController()
+    let nav = UINavigationController(rootViewController: favoritesVC)
+    nav.modalPresentationStyle = .fullScreen
+    
+    self.present(nav, animated: true)
   }
   
 }
