@@ -55,7 +55,6 @@ class SearchViewController: BaseViewController {
   func configureSearchController() {
     let searchController = UISearchController(searchResultsController: nil)
     searchController.searchResultsUpdater = self
-    searchController.searchBar.delegate = self
     navigationItem.hidesSearchBarWhenScrolling = false
     searchController.searchBar.placeholder = "영화명을 검색해보세요"
     navigationItem.searchController = searchController
@@ -69,6 +68,13 @@ class SearchViewController: BaseViewController {
       
       self.searchView.tableView.reloadData()
     }
+  }
+  
+  func fetchNewData(query: String?) {
+    ispaging = true
+    movieList = []
+    queryText = query
+    fetchData(query: queryText!)
   }
 
   @objc func onFavoriteList() {
@@ -106,18 +112,17 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
 
 // MARK: Extensions - UITableViewDataSourcePrefetching
 extension SearchViewController: UITableViewDataSourcePrefetching {
+  // TODO: Pagination 좀 더 깔끔하게 구현해보기
   func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
     for indexPath in indexPaths {
-      if ispaging == true {
-        if movieList.count - 1 == indexPath.row {
-          guard let query = queryText else { return }
-          
-          if pageableCount > perPage + start {
-            fetchData(query: query, start: perPage + start)
-          } else {
-            fetchData(query: query, start: perPage + start)
-            ispaging = false
-          }
+      if ispaging == true, movieList.count - 1 == indexPath.row {
+        guard let query = queryText else { return }
+        
+        if pageableCount > perPage + start {
+          fetchData(query: query, start: perPage + start)
+        } else {
+          fetchData(query: query, start: perPage + start)
+          ispaging = false
         }
       }
     }
@@ -126,22 +131,11 @@ extension SearchViewController: UITableViewDataSourcePrefetching {
 
 //MARK: Extensions - UISearchResultsUpdating
 extension SearchViewController: UISearchResultsUpdating {
-  func updateSearchResults(for searchController: UISearchController) { // 검색어에 따른 실시간 검색이 되도록 하기 위해 작성
-    ispaging = true
-    movieList = []
-    queryText = searchController.searchBar.text
-    fetchData(query: queryText!)
+  func updateSearchResults(for searchController: UISearchController) {
+    fetchNewData(query: searchController.searchBar.text)
   }
   
   func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-    ispaging = true
-    movieList = []
-    queryText = searchBar.text
-    fetchData(query: queryText!)
+    fetchNewData(query: searchBar.text)
   }
-}
-
-//MARK: Extensions - UISearchBarDelegate
-extension SearchViewController: UISearchBarDelegate {
-  
 }

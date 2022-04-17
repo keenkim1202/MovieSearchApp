@@ -21,20 +21,18 @@ class DetailViewController: BaseViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     
+    navigationController?.navigationBar.prefersLargeTitles = false
+    
     if let movie = movie {
       let infoView = detailView.infoView
       infoView.configure(movie: movie)
       title = infoView.titleLabel.text
       
-      if let url = URL(string: movie.link) { // test
+      if let url = URL(string: movie.link) {
         let request = URLRequest(url: url)
         detailView.webView.load(request)
       }
     }
-    
-    navigationController?.navigationBar.prefersLargeTitles = false
-    
-
   }
   
 }
