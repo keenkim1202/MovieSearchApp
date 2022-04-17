@@ -25,14 +25,16 @@ class DetailViewController: BaseViewController {
       let infoView = detailView.infoView
       infoView.configure(movie: movie)
       title = infoView.titleLabel.text
+      
+      if let url = URL(string: movie.link) { // test
+        let request = URLRequest(url: url)
+        detailView.webView.load(request)
+      }
     }
     
     navigationController?.navigationBar.prefersLargeTitles = false
     
-    if let url = URL(string: "https://www.naver.com/") { // test
-      let request = URLRequest(url: url)
-      detailView.webView.load(request)
-    }
+
   }
   
 }
