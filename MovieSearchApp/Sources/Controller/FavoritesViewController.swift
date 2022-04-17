@@ -10,7 +10,7 @@ import UIKit
 class FavoritesViewController: BaseViewController {
   
   // MARK: - Properties
-  let favoritesView = SearchView()
+  let favoritesView = MovieInfoView()
   
   // MARK: - View Life-Cycle
   override func loadView() {

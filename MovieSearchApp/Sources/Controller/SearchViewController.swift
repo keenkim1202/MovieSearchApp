@@ -13,7 +13,7 @@ import Kingfisher
 class SearchViewController: BaseViewController {
 
   // MARK: Properties
-  let searchView = SearchView()
+  let searchView = MovieListView()
   let apiService = APIService()
   
   let perPage: Int = 15

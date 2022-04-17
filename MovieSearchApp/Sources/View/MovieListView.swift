@@ -1,5 +1,5 @@
 //
-//  SearchView.swift
+//  MovieListView.swift
 //  MovieSearchApp
 //
 //  Created by KEEN on 2022/04/15.
@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class SearchView: UIView, ViewRepresentable {
+class MovieListView: UIView, ViewRepresentable {
   
   // MARK: - UI
   let tableView: UITableView = {
