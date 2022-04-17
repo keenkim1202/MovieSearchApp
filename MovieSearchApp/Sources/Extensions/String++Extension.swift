@@ -15,4 +15,12 @@ extension String {
       return self
     }
   }
+  
+  var checkIsUnRated: String {
+    if self == "0.00" {
+      return "평점 없음"
+    } else {
+      return self
+    }
+  }
 }
