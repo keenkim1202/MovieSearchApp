@@ -23,4 +23,5 @@ struct Movie: Decodable {
 
 struct MovieInfo: Decodable {
   let items: [Movie]
+  let total: Int
 }

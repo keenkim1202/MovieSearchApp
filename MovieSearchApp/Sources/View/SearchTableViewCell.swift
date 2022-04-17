@@ -76,6 +76,22 @@ class SearchTableViewCell: UITableViewCell, ViewRepresentable {
   }
   
   // MARK: - Configure
+  func configure(movie: Movie) {
+    let imageUrl = URL(string: movie.image)
+  
+    posterImageView.kf.setImage(with: imageUrl, placeholder: UIImage(systemName: "square.slash"))
+    titleLabel.text = removeBTags(movie.title)
+    directorLabel.text = "감독: \(movie.director.checkIsEmpty)"
+    actorLabel.text = "출현: \(movie.actorList.checkIsEmpty)"
+    rateLabel.text = "평점: \(movie.userRating.checkIsEmpty)"
+  }
+  
+  private func removeBTags(_ string: String) -> String {
+    return string
+      .replacingOccurrences(of: "<b>", with: "")
+      .replacingOccurrences(of: "</b>", with: "")
+  }
+  
   func createViews() {
     [titleLabel, directorLabel, actorLabel, rateLabel].forEach {
       verticalStackView.addArrangedSubview($0)

@@ -8,11 +8,19 @@
 import UIKit
 import Kingfisher
 
+// TODO: pagination 처리하기
+
 class SearchViewController: UIViewController {
 
   // MARK: Properties
   let searchView = SearchView()
   let apiService = APIService()
+  
+  let perPage: Int = 15
+  var queryText: String?
+  var start: Int = 1
+  var pageableCount: Int = 0
+  var ispaging: Bool = true
   
   var movieList: [Movie] = []
   
@@ -24,12 +32,6 @@ class SearchViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     configure()
-
-    apiService.fetchLocationInfo(query: "스파이더맨") { code, data in
-      self.movieList = data.items
-      self.searchView.tableView.reloadData()
-      print(self.movieList[3])
-    }
   }
   
   // MARK: Configure
@@ -39,6 +41,7 @@ class SearchViewController: UIViewController {
     
     searchView.tableView.delegate = self
     searchView.tableView.dataSource = self
+    searchView.tableView.prefetchDataSource = self
   }
   
   func configureNavigationBar() {
@@ -58,12 +61,16 @@ class SearchViewController: UIViewController {
     navigationItem.searchController = searchController
   }
   
-  private func removeBTags(_ string: String) -> String {
-    return string
-      .replacingOccurrences(of: "<b>", with: "")
-      .replacingOccurrences(of: "</b>", with: "")
+  func fetchData(query: String, perPage: Int = 15, start: Int = 1) {
+      self.apiService.fetchLocationInfo(query: query, display: perPage, start: start) { code, data in
+        self.pageableCount = data.total
+        self.movieList += data.items
+        self.start += perPage
+
+        self.searchView.tableView.reloadData()
+    }
   }
-  
+
   @objc func onFavoriteList() {
     print(#function)
   }
@@ -78,29 +85,56 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
   
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.identifier, for: indexPath) as? SearchTableViewCell else { return UITableViewCell() }
+    
     let movie = movieList[indexPath.row]
-    let imageUrl = URL(string: movie.image)
-  
-    cell.posterImageView.kf.setImage(with: imageUrl, placeholder: UIImage(systemName: "square.slash"))
-    cell.titleLabel.text = removeBTags(movie.title)
-    cell.directorLabel.text = "감독: \(movie.director.checkIsEmpty)"
-    cell.actorLabel.text = "출현: \(movie.actorList.checkIsEmpty)"
-    cell.rateLabel.text = "평점: \(movie.userRating.checkIsEmpty)"
+    cell.configure(movie: movie)
     return cell
   }
   
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
     return 110
   }
+  
+  func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    print(indexPath.row)
+  }
+}
+
+// MARK: Extensions - UITableViewDataSourcePrefetching
+extension SearchViewController: UITableViewDataSourcePrefetching {
+  func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+    for indexPath in indexPaths {
+      
+      if movieList.count - 1 == indexPath.row, ispaging == true {
+        guard let query = queryText else { return }
+        
+        if pageableCount > perPage + start {
+          fetchData(query: query, start: perPage + start)
+        } else {
+          fetchData(query: query, start: perPage + start)
+          ispaging = false
+        }
+
+      }
+    }
+  }
+  
+  func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
+    // print("최소 - \(indexPaths)")
+  }
 }
 
 //MARK: Extensions - UISearchResultsUpdating
 extension SearchViewController: UISearchResultsUpdating {
   func updateSearchResults(for searchController: UISearchController) {
-    print(#function)
+    // print(#function)
   }
   
-  
+  func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    queryText = searchBar.text
+    fetchData(query: queryText!)
+    print(movieList)
+  }
 }
 
 //MARK: Extensions - UISearchBarDelegate
