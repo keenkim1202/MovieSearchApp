@@ -10,7 +10,7 @@ import Kingfisher
 
 // TODO: pagination 처리하기
 
-class SearchViewController: UIViewController {
+class SearchViewController: BaseViewController {
 
   // MARK: Properties
   let searchView = SearchView()
@@ -87,7 +87,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.identifier, for: indexPath) as? SearchTableViewCell else { return UITableViewCell() }
     
     let movie = movieList[indexPath.row]
-    cell.configure(movie: movie)
+    cell.infoView.configure(movie: movie)
     return cell
   }
   
@@ -96,7 +96,11 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    print(indexPath.row)
+    let detailVC = DetailViewController()
+    let selectedMovie = movieList[indexPath.row]
+    detailVC.movie = selectedMovie
+
+    self.navigationController?.pushViewController(detailVC, animated: true)
   }
 }
 
