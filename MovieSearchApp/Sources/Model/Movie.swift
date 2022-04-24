@@ -8,12 +8,12 @@
 import Foundation
 
 struct Movie: Decodable {
-  let image: String // image
-  let title: String // title
-  let director: String // director
-  let actorList: String // actor
-  let userRating: String // userRating
-  let link: String // link
+  let image: String
+  let title: String
+  let director: String
+  let actorList: String
+  let userRating: String
+  let link: String
   
   enum CodingKeys: String, CodingKey {
     case image, title, director, userRating, link

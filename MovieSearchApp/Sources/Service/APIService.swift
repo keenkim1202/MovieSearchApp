@@ -12,7 +12,7 @@ class APIService {
   private let clientID = Bundle.main.clientID
   private let clientSecret = Bundle.main.clientSecret
   
-  func fetchLocationInfo(query: String, display: Int, start: Int, result: @escaping (Int, MovieInfo) -> Void) {
+  func fetchMovieInfo(query: String, display: Int, start: Int, result: @escaping (Int, MovieInfo) -> Void) {
     let url = Endpoint.searchMovie.url
     
     let params: Parameters = [

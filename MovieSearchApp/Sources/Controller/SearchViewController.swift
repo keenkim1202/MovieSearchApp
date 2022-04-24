@@ -61,7 +61,7 @@ class SearchViewController: BaseViewController {
   }
   
   func fetchData(query: String, perPage: Int = 15, start: Int = 1) {
-    self.apiService.fetchLocationInfo(query: query, display: perPage, start: start) { code, data in
+    self.apiService.fetchMovieInfo(query: query, display: perPage, start: start) { code, data in
       self.pageableCount = data.total
       self.movieList += data.items
       self.start += perPage
