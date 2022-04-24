@@ -6,14 +6,17 @@
 //
 
 import Foundation
+import RealmSwift
 
-struct Movie: Decodable {
-  let image: String
-  let title: String
-  let director: String
-  let actorList: String
-  let userRating: String
-  let link: String
+class Movie: Object, Decodable {
+  @Persisted var image: String
+  @Persisted var title: String
+  @Persisted var director: String
+  @Persisted var actorList: String
+  @Persisted var userRating: String
+  @Persisted var link: String
+  
+  @Persisted(primaryKey: true) var _id: ObjectId
   
   enum CodingKeys: String, CodingKey {
     case image, title, director, userRating, link
