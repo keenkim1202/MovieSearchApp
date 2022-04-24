@@ -8,7 +8,13 @@
 import UIKit
 import SnapKit
 
+protocol SearchTableViewCellDelegate: AnyObject {
+  func starButtonClicked(searchTableViewCell: SearchTableViewCell)
+}
+
 class SearchTableViewCell: UITableViewCell, ViewRepresentable {
+  
+  weak var delegate: SearchTableViewCellDelegate?
   
   static let identifier = String(describing: SearchTableViewCell.self)
 
@@ -18,12 +24,17 @@ class SearchTableViewCell: UITableViewCell, ViewRepresentable {
   // MARK: - Init
   override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
+    infoView.starButton.addTarget(self, action: #selector(onStar), for: .touchUpInside)
     createViews()
     setConstraints()
   }
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+  
+  @objc func onStar() {
+    delegate?.starButtonClicked(searchTableViewCell: self)
   }
   
   // MARK: - Configure
