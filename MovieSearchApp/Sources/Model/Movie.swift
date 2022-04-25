@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 import CoreMIDI
 
-class Movie: Decodable {
+struct Movie: Decodable {
   var image: String
   var title: String
   var director: String
@@ -29,6 +29,20 @@ struct MovieInfo: Decodable {
 }
 
 extension Movie {
+  func toMovie() -> Movie {
+    let title = replaceVerticalBarToComma(title)
+    let director = replaceVerticalBarToComma(director)
+    let actorList = replaceVerticalBarToComma(actorList)
+
+    return Movie(
+      image: image,
+      title: title,
+      director: director,
+      actorList: actorList,
+      userRating: userRating,
+      link: link)
+  }
+  
   func toFavoriteMovie() -> FavoriteMovie {
     return FavoriteMovie(
       title: title,
@@ -38,5 +52,28 @@ extension Movie {
       actorList: actorList,
       userRating: userRating
     )
+  }
+  
+  private func removeTags(_ string: String) -> String {
+    return string
+      .replacingOccurrences(of: "<b>", with: "")
+      .replacingOccurrences(of: "</b>", with: "")
+      .replacingOccurrences(of: "|", with: "")
+      .replacingOccurrences(of: "&amp;", with: "&")
+  }
+  
+  private func replaceVerticalBarToComma(_ string: String) -> String {
+    let array = string.components(separatedBy: "|")
+    var string = removeTags(array.joined(separator: ", "))
+    
+    if string.last == "," || string.last == " " || string.last == "|" {
+      string.removeLast()
+      
+      if string.last == "," {
+        string.removeLast()
+      }
+    }
+    
+    return string
   }
 }

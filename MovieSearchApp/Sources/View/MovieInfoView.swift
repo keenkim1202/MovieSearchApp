@@ -79,32 +79,10 @@ class MovieInfoView: UIView, ViewRepresentable {
     let imageUrl = URL(string: movie.image)
   
     posterImageView.kf.setImage(with: imageUrl, placeholder: UIImage(systemName: "square.slash"))
-    titleLabel.text = removeTags(movie.title)
-    directorLabel.text = "감독: \(replaceVerticalBarToComma(movie.director.checkIsEmpty))"
-    actorLabel.text = "출현: \(replaceVerticalBarToComma(movie.actorList.checkIsEmpty))"
+    titleLabel.text = movie.title
+    directorLabel.text = "감독: \(movie.director.checkIsEmpty)"
+    actorLabel.text = "출현: \(movie.actorList.checkIsEmpty)"
     rateLabel.text = "평점: \(movie.userRating.checkIsUnRated)"
-  }
-  
-  private func removeTags(_ string: String) -> String {
-    return string
-      .replacingOccurrences(of: "<b>", with: "")
-      .replacingOccurrences(of: "</b>", with: "")
-      .replacingOccurrences(of: "|", with: "")
-  }
-  
-  private func replaceVerticalBarToComma(_ string: String) -> String {
-    let array = string.components(separatedBy: "|")
-    var string = removeTags(array.joined(separator: ", "))
-    
-    if string.last == "," || string.last == " " {
-      string.removeLast()
-      
-      if string.last == "," {
-        string.removeLast()
-      }
-    }
-    
-    return string
   }
   
   func createViews() {

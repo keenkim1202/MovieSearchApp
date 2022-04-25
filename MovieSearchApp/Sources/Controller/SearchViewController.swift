@@ -63,8 +63,10 @@ class SearchViewController: BaseViewController {
   
   func fetchData(query: String, perPage: Int = 15, start: Int = 1) {
     self.apiService.fetchMovieInfo(query: query, display: perPage, start: start) { code, data in
+      let items = data.items.map { $0.toMovie() }
+      
       self.pageableCount = data.total
-      self.movieList += data.items
+      self.movieList += items
       self.start += perPage
       
       self.searchView.tableView.reloadData()

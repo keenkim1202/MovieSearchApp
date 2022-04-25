@@ -22,6 +22,7 @@ final class MovieRepository: MovieRepositoryType {
   
   init(realm: Realm) {
     self.realm = realm
+    print(realm.configuration.fileURL ?? "cannot find location")
   }
   
   var count: Int {
