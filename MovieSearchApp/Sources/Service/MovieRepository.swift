@@ -38,7 +38,7 @@ final class MovieRepository: MovieRepositoryType {
       }
       return
     }
-
+    
     item.date = Date()
     item.isEnable = true
     
@@ -61,7 +61,6 @@ final class MovieRepository: MovieRepositoryType {
   }
   
   func isContain(item: FavoriteMovie) -> Bool {
-    print("item :", item)
     return realm.objects(FavoriteMovie.self).filter("isEnable = true AND _id == %@", item._id).count > 0
   }
   

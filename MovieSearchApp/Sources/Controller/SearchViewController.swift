@@ -156,17 +156,12 @@ extension SearchViewController: SearchTableViewCellDelegate {
     guard let repo = repository else { return }
     guard let indexPath = searchView.tableView.indexPath(for: searchTableViewCell) else { return }
     
-    print(movieList[indexPath.row])
     let movieItem = movieList[indexPath.row]
     
     if !repo.isContain(item: movieItem) {
-      print("즐겨찾기 전")
       searchTableViewCell.infoView.starButton.isSelected = true
       repo.add(item: movieItem)
-      print(repo.count)
     } else {
-      // 이미 즐겨찾기한 경우, realm에서 삭제 및 버튼 toggle
-      print("즐겨찾기 완료")
       searchTableViewCell.infoView.starButton.isSelected = false
       repo.remove(item: movieItem)
     }
