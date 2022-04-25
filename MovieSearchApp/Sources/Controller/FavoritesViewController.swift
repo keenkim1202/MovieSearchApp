@@ -55,6 +55,7 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
     guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.identifier, for: indexPath) as? SearchTableViewCell else { return UITableViewCell() }
     let favoriteMovie = favoritesList[indexPath.row]
     cell.infoView.configure(movie: favoriteMovie)
+    cell.delegate = self
     
     return cell
   }
@@ -63,4 +64,17 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
     return Metric.cellHeight
   }
   
+}
+
+// MARK: Extension - SearchTableViewCellDelegate
+extension FavoritesViewController: SearchTableViewCellDelegate {
+  func starButtonClicked(searchTableViewCell: SearchTableViewCell) {
+    print(#function)
+    guard let repo = repository else { return }
+    guard let indexPath = favoritesView.tableView.indexPath(for: searchTableViewCell) else { return }
+    
+    repo.remove(item: favoritesList[indexPath.row])
+    favoritesList = repo.fetch()
+    favoritesView.tableView.reloadData()
+  }
 }

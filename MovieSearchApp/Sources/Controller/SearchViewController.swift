@@ -153,7 +153,6 @@ extension SearchViewController: UISearchResultsUpdating {
 // MARK: - SearchTableViewCellDelegate
 extension SearchViewController: SearchTableViewCellDelegate {
   func starButtonClicked(searchTableViewCell: SearchTableViewCell) {
-    print(#function)
     guard let repo = repository else { return }
     guard let indexPath = searchView.tableView.indexPath(for: searchTableViewCell) else { return }
     

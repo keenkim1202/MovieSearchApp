@@ -84,6 +84,7 @@ class MovieInfoView: UIView, ViewRepresentable {
     directorLabel.text = "감독: \(movie.director.checkIsEmpty)"
     actorLabel.text = "출현: \(movie.actorList.checkIsEmpty)"
     rateLabel.text = "평점: \(movie.userRating.checkIsUnRated)"
+    starButton.isSelected = movie.isEnable
   }
   
   func createViews() {
