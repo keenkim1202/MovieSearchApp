@@ -7,16 +7,15 @@
 
 import Foundation
 import RealmSwift
+import CoreMIDI
 
-class Movie: Object, Decodable {
-  @Persisted var image: String
-  @Persisted var title: String
-  @Persisted var director: String
-  @Persisted var actorList: String
-  @Persisted var userRating: String
-  @Persisted var link: String
-  
-  @Persisted(primaryKey: true) var _id: ObjectId
+class Movie: Decodable {
+  var image: String
+  var title: String
+  var director: String
+  var actorList: String
+  var userRating: String
+  var link: String
   
   enum CodingKeys: String, CodingKey {
     case image, title, director, userRating, link
@@ -27,4 +26,17 @@ class Movie: Object, Decodable {
 struct MovieInfo: Decodable {
   let items: [Movie]
   let total: Int
+}
+
+extension Movie {
+  func toFavoriteMovie() -> FavoriteMovie {
+    return FavoriteMovie(
+      title: title,
+      link: link,
+      image: image,
+      director: director,
+      actorList: actorList,
+      userRating: userRating
+    )
+  }
 }

@@ -11,10 +11,10 @@ import RealmSwift
 
 protocol MovieRepositoryType {
   var count: Int { get }
-  func add(item: Movie)
-  func remove(item: Movie)
-  func fetch() -> [Movie]
-  func isContain(item: Movie) -> Bool
+  func add(item: FavoriteMovie)
+  func remove(item: FavoriteMovie)
+  func fetch() -> [FavoriteMovie]
+  func isContain(item: FavoriteMovie) -> Bool
 }
 
 final class MovieRepository: MovieRepositoryType {
@@ -25,26 +25,29 @@ final class MovieRepository: MovieRepositoryType {
   }
   
   var count: Int {
-    return realm.objects(Movie.self).count
+    return realm.objects(FavoriteMovie.self).count
   }
   
-  func add(item: Movie) {
+  func add(item: FavoriteMovie) {
     try! realm.write {
       realm.add(item)
     }
   }
   
-  func remove(item: Movie) {
+  func remove(item: FavoriteMovie) {
     try! realm.write {
       realm.delete(item)
     }
   }
   
-  func fetch() -> [Movie] {
-    return realm.objects(Movie.self).map { $0 }
+  func fetch() -> [FavoriteMovie] {
+    return realm.objects(FavoriteMovie.self).map { $0 }
   }
   
-  func isContain(item: Movie) -> Bool {
-    return realm.objects(Movie.self).filter("_id = '\(item._id)'").count > 0
+  // func isContain(item: Movie) -> Bool {
+  //   return realm.objects(Movie.self).filter("_id = \(item._id)").count > 0
+  // }
+  func isContain(item: FavoriteMovie) -> Bool {
+    return realm.objects(FavoriteMovie.self).contains(item) ? true : false
   }
 }

@@ -15,6 +15,7 @@ class SearchViewController: BaseViewController {
   // MARK: Properties
   let searchView = MovieListView()
   let apiService = APIService()
+  var repository: MovieRepository? = nil
   
   let perPage: Int = 15
   var queryText: String?
@@ -55,8 +56,8 @@ class SearchViewController: BaseViewController {
   func configureSearchController() {
     let searchController = UISearchController(searchResultsController: nil)
     searchController.searchResultsUpdater = self
-    navigationItem.hidesSearchBarWhenScrolling = false
     searchController.searchBar.placeholder = "영화명을 검색해보세요"
+    navigationItem.hidesSearchBarWhenScrolling = false
     navigationItem.searchController = searchController
   }
   
@@ -97,6 +98,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     guard let cell = tableView.dequeueReusableCell(withIdentifier: SearchTableViewCell.identifier, for: indexPath) as? SearchTableViewCell else { return UITableViewCell() }
     
     let movie = movieList[indexPath.row]
+    cell.delegate = self
     cell.infoView.configure(movie: movie)
     return cell
   }
@@ -141,5 +143,31 @@ extension SearchViewController: UISearchResultsUpdating {
   
   func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
     fetchNewData(query: searchBar.text)
+  }
+}
+
+// MARK: - SearchTableViewCellDelegate
+extension SearchViewController: SearchTableViewCellDelegate {
+  func starButtonClicked(searchTableViewCell: SearchTableViewCell) {
+    guard let repo = repository else {
+      print("search - repo is nil")
+      return
+    }
+    guard let indexPath = searchView.tableView.indexPath(for: searchTableViewCell) else { return }
+    
+    print(movieList[indexPath.row])
+    let movieItem = movieList[indexPath.row].toFavoriteMovie()
+    
+    if !repo.isContain(item: movieItem) {
+      print("즐겨찾기 전")
+      searchTableViewCell.infoView.starButton.isSelected = true
+      repo.add(item: movieItem)
+      print(repo.count)
+    } else {
+      // 이미 즐겨찾기한 경우, realm에서 삭제 및 버튼 toggle
+      print("즐겨찾기 완료")
+      searchTableViewCell.infoView.starButton.isSelected = false
+      repo.remove(item: movieItem)
+    }
   }
 }
