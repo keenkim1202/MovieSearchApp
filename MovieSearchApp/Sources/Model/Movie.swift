@@ -7,7 +7,6 @@
 
 import Foundation
 import RealmSwift
-import CoreMIDI
 
 struct Movie: Decodable {
   var image: String
