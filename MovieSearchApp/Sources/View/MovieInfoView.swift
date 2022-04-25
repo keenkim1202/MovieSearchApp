@@ -58,6 +58,7 @@ class MovieInfoView: UIView, ViewRepresentable {
   let starButton: UIButton = {
     let button = UIButton()
     button.setImage(UIImage(systemName: "star"), for: .normal)
+    button.setImage(UIImage(systemName: "star.fill"), for: .selected)
     button.tintColor = .mainOrangeColor
     return button
   }()
