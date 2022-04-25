@@ -75,7 +75,7 @@ class MovieInfoView: UIView, ViewRepresentable {
   }
   
   // MARK: - Configure
-  func configure(movie: Movie) {
+  func configure(movie: FavoriteMovie) {
     let imageUrl = URL(string: movie.image)
   
     posterImageView.kf.setImage(with: imageUrl, placeholder: UIImage(systemName: "square.slash"))

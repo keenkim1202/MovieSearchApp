@@ -8,6 +8,11 @@
 import UIKit
 
 class BaseViewController: UIViewController {
+  
+  // MARK: - Metric
+  struct Metric {
+    static let cellHeight: CGFloat = 110
+  }
 
   // MARK: - View Life-Cycle
   override func viewDidLoad() {

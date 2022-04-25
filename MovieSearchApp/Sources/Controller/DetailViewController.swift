@@ -25,7 +25,7 @@ class DetailViewController: BaseViewController {
     
     if let movie = movie {
       let infoView = detailView.infoView
-      infoView.configure(movie: movie)
+      infoView.configure(movie: movie.toFavoriteMovie())
       title = infoView.titleLabel.text
       
       if let url = URL(string: movie.link) {

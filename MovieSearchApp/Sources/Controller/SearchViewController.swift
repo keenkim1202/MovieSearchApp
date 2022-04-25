@@ -82,6 +82,8 @@ class SearchViewController: BaseViewController {
 
   @objc func onFavoriteList() {
     let favoritesVC = FavoritesViewController()
+    favoritesVC.repository = repository
+    
     let nav = UINavigationController(rootViewController: favoritesVC)
     nav.modalPresentationStyle = .fullScreen
     
@@ -101,12 +103,12 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     let movie = movieList[indexPath.row]
     cell.delegate = self
-    cell.infoView.configure(movie: movie)
+    cell.infoView.configure(movie: movie.toFavoriteMovie())
     return cell
   }
   
   func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    return 110
+    return Metric.cellHeight
   }
   
   func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
