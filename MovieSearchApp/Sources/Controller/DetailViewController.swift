@@ -11,7 +11,7 @@ class DetailViewController: BaseViewController {
   
   // MARK: Properties
   let detailView = DetailView()
-  var movie: Movie?
+  var movie: FavoriteMovie?
   
   // MARK: View Life-Cycle
   override func loadView() {
@@ -25,7 +25,7 @@ class DetailViewController: BaseViewController {
     
     if let movie = movie {
       let infoView = detailView.infoView
-      infoView.configure(movie: movie.toFavoriteMovie())
+      infoView.configure(movie: movie)
       title = infoView.titleLabel.text
       
       if let url = URL(string: movie.link) {

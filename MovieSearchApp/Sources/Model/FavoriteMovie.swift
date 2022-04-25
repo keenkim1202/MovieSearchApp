@@ -15,6 +15,8 @@ class FavoriteMovie: Object {
   @Persisted var actorList: String
   @Persisted var userRating: String
   @Persisted var link: String
+  @Persisted var date: Date
+  @Persisted var isEnable: Bool
   
   @Persisted(primaryKey: true) var _id: ObjectId
   
@@ -24,13 +26,15 @@ class FavoriteMovie: Object {
   }
   
   convenience init(title: String, link: String, image: String, director: String, actorList: String, userRating: String) {
-      self.init()
-
-      self.title = title
-      self.link = link
-      self.image = image
-      self.director = director
-      self.actorList = actorList
-      self.userRating = userRating
+    self.init()
+    
+    self.title = title
+    self.link = link
+    self.image = image
+    self.director = director
+    self.actorList = actorList
+    self.userRating = userRating
+    self.date = Date()
+    self.isEnable = false
   }
 }

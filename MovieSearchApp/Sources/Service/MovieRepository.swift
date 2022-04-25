@@ -15,6 +15,7 @@ protocol MovieRepositoryType {
   func remove(item: FavoriteMovie)
   func fetch() -> [FavoriteMovie]
   func isContain(item: FavoriteMovie) -> Bool
+  func cleanUp()
 }
 
 final class MovieRepository: MovieRepositoryType {
@@ -30,6 +31,17 @@ final class MovieRepository: MovieRepositoryType {
   }
   
   func add(item: FavoriteMovie) {
+    if let existItem = realm.objects(FavoriteMovie.self).filter("_id == %@", item._id).first {
+      try! realm.write {
+        existItem.date = Date()
+        existItem.isEnable = true
+      }
+      return
+    }
+
+    item.date = Date()
+    item.isEnable = true
+    
     try! realm.write {
       realm.add(item)
     }
@@ -37,18 +49,26 @@ final class MovieRepository: MovieRepositoryType {
   
   func remove(item: FavoriteMovie) {
     try! realm.write {
-      realm.delete(item)
+      item.isEnable = false
     }
   }
   
   func fetch() -> [FavoriteMovie] {
-    return realm.objects(FavoriteMovie.self).map { $0 }
+    return realm.objects(FavoriteMovie.self)
+      .filter("isEnable = true")
+      .sorted(byKeyPath: "date", ascending: false)
+      .map { $0 }
   }
   
-  // func isContain(item: Movie) -> Bool {
-  //   return realm.objects(Movie.self).filter("_id = \(item._id)").count > 0
-  // }
   func isContain(item: FavoriteMovie) -> Bool {
-    return realm.objects(FavoriteMovie.self).contains(item) ? true : false
+    print("item :", item)
+    return realm.objects(FavoriteMovie.self).filter("isEnable = true AND _id == %@", item._id).count > 0
+  }
+  
+  func cleanUp() {
+    let items = realm.objects(FavoriteMovie.self).filter("isEnable = false")
+    try! realm.write {
+      realm.delete(items)
+    }
   }
 }

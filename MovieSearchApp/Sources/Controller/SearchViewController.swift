@@ -23,7 +23,7 @@ class SearchViewController: BaseViewController {
   var pageableCount: Int = 0
   var ispaging: Bool = true
   
-  var movieList: [Movie] = []
+  var movieList: [FavoriteMovie] = []
   
   // MARK: View Life-Cycle
   override func loadView() {
@@ -63,7 +63,7 @@ class SearchViewController: BaseViewController {
   
   func fetchData(query: String, perPage: Int = 15, start: Int = 1) {
     self.apiService.fetchMovieInfo(query: query, display: perPage, start: start) { code, data in
-      let items = data.items.map { $0.toMovie() }
+      let items = data.items.map { $0.toMovie().toFavoriteMovie() }
       
       self.pageableCount = data.total
       self.movieList += items
@@ -103,7 +103,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     let movie = movieList[indexPath.row]
     cell.delegate = self
-    cell.infoView.configure(movie: movie.toFavoriteMovie())
+    cell.infoView.configure(movie: movie)
     return cell
   }
   
@@ -153,14 +153,11 @@ extension SearchViewController: UISearchResultsUpdating {
 // MARK: - SearchTableViewCellDelegate
 extension SearchViewController: SearchTableViewCellDelegate {
   func starButtonClicked(searchTableViewCell: SearchTableViewCell) {
-    guard let repo = repository else {
-      print("search - repo is nil")
-      return
-    }
+    guard let repo = repository else { return }
     guard let indexPath = searchView.tableView.indexPath(for: searchTableViewCell) else { return }
     
     print(movieList[indexPath.row])
-    let movieItem = movieList[indexPath.row].toFavoriteMovie()
+    let movieItem = movieList[indexPath.row]
     
     if !repo.isContain(item: movieItem) {
       print("즐겨찾기 전")
